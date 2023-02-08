@@ -12,11 +12,6 @@ class ArticleController extends Controller
 {
     use ApiResponser;
 
-    public function index()
-    {
-        //
-    }
-
     public function store(ArticlesRequest $request)
     {
         //
