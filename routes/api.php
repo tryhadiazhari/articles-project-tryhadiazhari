@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CreateDbController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,13 +21,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('createdb', [CreateDbController::class, 'index']);
 
 Route::prefix('users')->group(function () {
-    Route::controller(UserController::class)->group(function () {
+    Route::controller(AuthController::class)->group(function () {
         Route::post('register', 'register');
         Route::post('login', 'login');
     });
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+    });
+
     Route::controller(ArticleController::class)->group(function () {
         Route::post('/article', 'store');
         Route::get('/article/{limit}/{offset}', 'showAll');
