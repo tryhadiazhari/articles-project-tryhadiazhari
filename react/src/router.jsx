@@ -9,6 +9,7 @@ import Users from "./views/Users";
 import UserForm from "./views/UserForm";
 import Article from "./views/Article.jsx";
 import ArticleEdit from "./views/ArticleEdit.jsx";
+import Preview from "./views/Preview.jsx";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,14 @@ const router = createBrowserRouter([
             {
                 path: "/article/:id",
                 element: <ArticleEdit key="userUpdate" />,
+            },
+            {
+                path: "/article/new",
+                element: <ArticleEdit key="userCreate" />,
+            },
+            {
+                path: "/preview",
+                element: <Preview />,
             },
             {
                 path: "/users",

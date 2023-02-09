@@ -15,6 +15,7 @@ export default function ArticleEdit() {
         category: "",
         status: "",
     });
+
     const [loading, setLoading] = useState(false);
     const { setNotification } = useStateContext();
     const [isError, setIsError] = useState(false);
@@ -37,11 +38,29 @@ export default function ArticleEdit() {
 
     const onSubmit = (ev) => {
         ev.preventDefault();
-        if (article.id) {
+
+        if (id) {
             axiosClient
-                .put(`/article/${article.id}`, article)
+                .put(`/article/${id}`, article)
                 .then(() => {
-                    setNotification("Article was successfully updated");
+                    navigate("/article");
+                    setIsError(false);
+                })
+                .catch((err) => {
+                    const {
+                        response: {
+                            data: {
+                                meta: { message },
+                            },
+                        },
+                    } = err;
+                    setIsError(true);
+                    setErrorMessage(message);
+                });
+        } else {
+            axiosClient
+                .post("/article", article)
+                .then(() => {
                     navigate("/article");
                     setIsError(false);
                 })
@@ -193,56 +212,6 @@ export default function ArticleEdit() {
                     </Card.Text>
                 </Card.Body>
             </Card>
-
-            {/* <div className="card animated fadeInDown">
-                {loading && <div className="text-center">Loading...</div>}
-                {errors && (
-                    <div className="alert">
-                        {Object.keys(errors).map((key) => (
-                            <p key={key}>{errors[key][0]}</p>
-                        ))}
-                    </div>
-                )}
-                {!loading && (
-                    <form onSubmit={onSubmit}>
-                        <input
-                            value={article.name}
-                            onChange={(ev) =>
-                                setArticle({ ...user, name: ev.target.value })
-                            }
-                            placeholder="Name"
-                        />
-                        <input
-                            value={article.email}
-                            onChange={(ev) =>
-                                setArticle({ ...user, email: ev.target.value })
-                            }
-                            placeholder="Email"
-                        />
-                        <input
-                            type="password"
-                            onChange={(ev) =>
-                                setArticle({
-                                    ...user,
-                                    password: ev.target.value,
-                                })
-                            }
-                            placeholder="Password"
-                        />
-                        <input
-                            type="password"
-                            onChange={(ev) =>
-                                setArticle({
-                                    ...user,
-                                    password_confirmation: ev.target.value,
-                                })
-                            }
-                            placeholder="Password Confirmation"
-                        />
-                        <button className="btn">Save</button>
-                    </form>
-                )}
-            </div> */}
         </>
     );
 }

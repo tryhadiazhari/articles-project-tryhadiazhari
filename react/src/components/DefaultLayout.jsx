@@ -25,7 +25,6 @@ export default function DefaultLayout() {
 
     useEffect(() => {
         axiosClient.get("/users").then(({ data }) => {
-            console.log(data);
             setUser(data);
         });
     }, []);
@@ -36,7 +35,8 @@ export default function DefaultLayout() {
                 <Container>
                     <Nav className="me-auto">
                         <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-                        <Nav.Link href="/article">Article</Nav.Link>
+                        <Nav.Link href="/article">All Posts</Nav.Link>
+                        <Nav.Link href="/preview">Preview</Nav.Link>
                     </Nav>
                     <Nav className="ms-auto">
                         <Nav.Link href="/dashboard"></Nav.Link>

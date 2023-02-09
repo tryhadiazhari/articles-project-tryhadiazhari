@@ -40,33 +40,12 @@ export default function Signup() {
 
                 setIsError(true);
                 setErrorMessage(message);
-                // const response = err.response;
-                // if (response && response.status === 422) {
-                //     setErrors(response.data.errors);
-                // }
             });
     };
 
     return (
         <div className="login-signup-form animated fadeInDown">
             <div className="form">
-                {/* <form onSubmit={onSubmit}>
-          <h1 className="title">Signup for Free</h1>
-          {errors &&
-            <div className="alert">
-              {Object.keys(errors).map(key => (
-                <p key={key}>{errors[key][0]}</p>
-              ))}
-            </div>
-          }
-          <input ref={nameRef} type="text" placeholder="Full Name"/>
-          <input ref={emailRef} type="email" placeholder="Email Address"/>
-          <input ref={passwordRef} type="password" placeholder="Password"/>
-          <input ref={passwordConfirmationRef} type="password" placeholder="Repeat Password"/>
-          <button className="btn btn-block">Signup</button>
-          <p className="message">Already registered? <Link to="/login">Sign In</Link></p>
-        </form> */}
-
                 <Form onSubmit={onSubmit}>
                     <h1 className="title">Login into your account</h1>
 
@@ -161,18 +140,11 @@ export default function Signup() {
                         )}
                     </FloatingLabel>
 
-                    {/* <input ref={emailRef} type="email" placeholder="Email" />
-                    <input
-                        ref={passwordRef}
-                        type="password"
-                        placeholder="Password"
-                    /> */}
                     <button className="btn btn-block btn-primary mt-3">
                         Login
                     </button>
                     <p className="message">
-                        Not registered?{" "}
-                        <Link to="/signup">Create an account</Link>
+                        You have accounts? <Link to="/login">Login Here</Link>
                     </p>
                 </Form>
             </div>

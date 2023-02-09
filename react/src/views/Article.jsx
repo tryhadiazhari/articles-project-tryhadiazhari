@@ -9,26 +9,13 @@ import Nav from "react-bootstrap/Nav";
 import { FaEdit } from "@react-icons/all-files/fa/FaEdit";
 import { FaTrashAlt } from "@react-icons/all-files/fa/FaTrashAlt";
 
-export default function Users() {
+export default function Article() {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { setNotification } = useStateContext();
 
     useEffect(() => {
         getArticle();
     }, []);
-
-    const onClickTrash = (articles) => {
-        if (
-            !window.confirm("Are you sure you want move this article to trash?")
-        ) {
-            return;
-        }
-        axiosClient.put(`/article/${articles.id}`, articles).then(() => {
-            setNotification("Article was move to trash");
-            getArticle();
-        });
-    };
 
     const getArticle = () => {
         setLoading(true);
@@ -42,17 +29,44 @@ export default function Users() {
                 setLoading(false);
             });
     };
+
     const [tab, setTab] = useState("publish");
 
     const moveToTrash = async (id, title, content, category) => {
         setLoading(true);
         try {
+            if (
+                !window.confirm(
+                    "Are you sure you want move this posts to trash?"
+                )
+            ) {
+                return;
+            }
+
             await axiosClient.put(`/article/${id}`, {
                 title,
                 content,
                 category,
                 status: "trash",
             });
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+            getArticle();
+        }
+    };
+
+    const deleted = async (id) => {
+        setLoading(true);
+        try {
+            if (
+                !window.confirm("Are you sure you want to delete this posts?")
+            ) {
+                return;
+            }
+
+            await axiosClient.delete(`/article/${id}`);
         } catch (error) {
             console.error(error);
         } finally {
@@ -71,9 +85,9 @@ export default function Users() {
                     alignItems: "center",
                 }}
             >
-                <h1>Articles</h1>
+                <h1>Posts</h1>
 
-                <Link className="btn-add btn btn-primary" to="">
+                <Link className="btn-add btn btn-primary" to="/article/new">
                     Add new
                 </Link>
             </div>
@@ -87,23 +101,23 @@ export default function Users() {
                                     eventKey="publish"
                                     onClick={() => setTab("publish")}
                                 >
-                                    Publish
+                                    Published
                                 </Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link
-                                    eventKey="draft"
+                                    eventKey="drafts"
                                     onClick={() => setTab("draft")}
                                 >
-                                    Draft
+                                    Drafts
                                 </Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link
-                                    eventKey="trash"
+                                    eventKey="trashed"
                                     onClick={() => setTab("trash")}
                                 >
-                                    Trash
+                                    Trashed
                                 </Nav.Link>
                             </Nav.Item>
                         </Nav>
@@ -115,7 +129,7 @@ export default function Users() {
                                     <th>Category</th>
                                     <th
                                         className="text-center"
-                                        style={{ width: "7%" }}
+                                        style={{ width: "9%" }}
                                     >
                                         Actions
                                     </th>
@@ -132,37 +146,75 @@ export default function Users() {
                             )}
                             {!loading && (
                                 <tbody>
-                                    {articles
-                                        .filter((item) => item.status === tab)
-                                        .map((u, i) => (
-                                            <tr key={u.id}>
-                                                <td>{i + 1}</td>
-                                                <td>{u.title}</td>
-                                                <td>{u.category}</td>
-                                                <td className="text-center">
-                                                    <Link
-                                                        className="btn-secondary btn-sm btn"
-                                                        to={"/article/" + u.id}
-                                                    >
-                                                        <FaEdit />
-                                                    </Link>
-                                                    &nbsp;
-                                                    <button
-                                                        className="btn-danger btn-sm btn"
-                                                        onClick={() =>
-                                                            moveToTrash(
-                                                                u.id,
-                                                                u.title,
-                                                                u.content,
-                                                                u.category
-                                                            )
-                                                        }
-                                                    >
-                                                        <FaTrashAlt />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                    {articles.filter(
+                                        (item) => item.status === tab
+                                    ).length > 0 ? (
+                                        articles
+                                            .filter(
+                                                (item) => item.status === tab
+                                            )
+                                            .map((u, i) => (
+                                                <tr key={u.id}>
+                                                    <td>{i + 1}</td>
+                                                    <td>{u.title}</td>
+                                                    <td>{u.category}</td>
+                                                    <td className="text-center">
+                                                        <div className="row px-0">
+                                                            <div className="col-auto ms-auto">
+                                                                <Link
+                                                                    className="btn-secondary btn-sm btn"
+                                                                    to={
+                                                                        "/article/" +
+                                                                        u.id
+                                                                    }
+                                                                >
+                                                                    <FaEdit />
+                                                                </Link>
+                                                            </div>
+                                                            <div className="col-auto me-auto">
+                                                                {tab ===
+                                                                "trash" ? (
+                                                                    <button
+                                                                        className="btn-danger btn-sm btn"
+                                                                        onClick={() =>
+                                                                            deleted(
+                                                                                u.id
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <FaTrashAlt />
+                                                                    </button>
+                                                                ) : (
+                                                                    <button
+                                                                        className="btn-danger btn-sm btn"
+                                                                        onClick={() =>
+                                                                            moveToTrash(
+                                                                                u.id,
+                                                                                u.title,
+                                                                                u.content,
+                                                                                u.category
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <FaTrashAlt />
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                    ) : (
+                                        <tr>
+                                            <td
+                                                colSpan={4}
+                                                className="text-center"
+                                                style={{ fontStyle: "italic" }}
+                                            >
+                                                Tidak ada data tersedia
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             )}
                         </Table>
