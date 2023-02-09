@@ -1,4 +1,4 @@
-# tryhadi-azhari
+# BE-and-FE-articles
 
 Cara penggunaan program :
 
