@@ -18,8 +18,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('createdb', [CreateDbController::class, 'index']);
-
 Route::prefix('users')->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::post('register', 'register');

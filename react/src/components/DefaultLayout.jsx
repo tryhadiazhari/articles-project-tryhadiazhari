@@ -1,58 +1,51 @@
-import {Link, Navigate, Outlet} from "react-router-dom";
-import {useStateContext} from "../context/ContextProvider";
+import { Link, Navigate, Outlet } from "react-router-dom";
+import { useStateContext } from "../context/ContextProvider";
 import axiosClient from "../axios-client.js";
-import {useEffect} from "react";
+import { useEffect } from "react";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 export default function DefaultLayout() {
-  const {user, token, setUser, setToken, notification} = useStateContext();
+    const { user, token, setUser, setToken, notification } = useStateContext();
 
-  if (!token) {
-    return <Navigate to="/login"/>
-  }
+    if (!token) {
+        return <Navigate to="/login" />;
+    }
 
-  const onLogout = ev => {
-    ev.preventDefault()
+    const onLogout = (ev) => {
+        ev.preventDefault();
 
-    axiosClient.post('/users/logout')
-      .then(() => {
-        setUser({})
-        setToken(null)
-      })
-  }
+        axiosClient.post("/users/logout").then(() => {
+            setUser({});
+            setToken(null);
+        });
+    };
 
-  useEffect(() => {
-    axiosClient.get('/user')
-      .then(({data}) => {
-         setUser(data)
-      })
-  }, [])
+    useEffect(() => {
+        axiosClient.get("/users").then(({ data }) => {
+            console.log(data);
+            setUser(data);
+        });
+    }, []);
 
-  return (
-    <div id="defaultLayout">
-      <aside>
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/users">Users</Link>
-      </aside>
-      <div className="content">
-        <header>
-          <div>
-            Header
-          </div>
+    return (
+        <div id="defaultLayout">
+            <Navbar bg="dark" variant="dark">
+                <Container>
+                    <Nav className="me-auto">
+                        <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+                        <Nav.Link href="/article">Article</Nav.Link>
+                    </Nav>
+                    <Nav className="ms-auto">
+                        <Nav.Link href="/dashboard">{user.name}</Nav.Link>
+                        <Nav.Link onClick={onLogout}>Logout</Nav.Link>
+                    </Nav>
+                </Container>
+            </Navbar>
 
-          <div>
-            {user.name} &nbsp; &nbsp;
-            <a onClick={onLogout} className="btn-logout" href="#">Logout</a>
-          </div>
-        </header>
-        <main>
-          <Outlet/>
-        </main>
-        {notification &&
-          <div className="notification">
-            {notification}
-          </div>
-        }
-      </div>
-    </div>
-  )
+            <Outlet />
+        </div>
+    );
 }

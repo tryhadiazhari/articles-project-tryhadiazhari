@@ -28,14 +28,14 @@ class ArticleController extends Controller
     public function showAll(Article $article, $limit, $offset)
     {
         return $article->offset($offset)->limit($limit)->get([
-            'title', 'content', 'category', 'status'
+            'id', 'title', 'content', 'category', 'status'
         ]);
     }
 
     public function showById(Article $article, $id)
     {
-        return $article->findOrFail($id)->get([
-            'title', 'content', 'category', 'status'
+        return $article->findOrFail($id)->first([
+            'id', 'title', 'content', 'category', 'status'
         ]);
     }
 
