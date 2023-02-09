@@ -5,7 +5,6 @@ import { useStateContext } from "../context/ContextProvider.jsx";
 import { useState } from "react";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 
 export default function Login() {
     const emailRef = createRef();

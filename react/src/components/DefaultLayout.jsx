@@ -39,8 +39,10 @@ export default function DefaultLayout() {
                         <Nav.Link href="/article">Article</Nav.Link>
                     </Nav>
                     <Nav className="ms-auto">
-                        <Nav.Link href="/dashboard">{user.name}</Nav.Link>
-                        <Nav.Link onClick={onLogout}>Logout</Nav.Link>
+                        <Nav.Link href="/dashboard"></Nav.Link>
+                        <Nav.Link onClick={onLogout}>
+                            ({user.name}) Logout
+                        </Nav.Link>
                     </Nav>
                 </Container>
             </Navbar>

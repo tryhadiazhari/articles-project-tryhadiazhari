@@ -29,7 +29,11 @@ class SignupRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => [
                 'required',
-                'confirmed',
+                Password::min(6)
+            ],
+            'password_confirmation' => [
+                'required',
+                'same:password',
                 Password::min(6)
             ]
         ];
