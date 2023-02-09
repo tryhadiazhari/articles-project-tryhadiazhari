@@ -1,6 +1,6 @@
 # BE-and-FE-articles
 
-Cara penggunaan program :
+Cara penggunaan program setelah clone repo git ini:
 
 1.  Ketikkan perintah "composer update" untuk mendownload package dari backend Laravel 9
 2.  Ketikkan perintah "php artisan migrate" untuk melakukan create Database dan create tabel
